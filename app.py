@@ -4,12 +4,12 @@ import torch
 import torch.nn as nn
 import numpy as np
 import pandas as pd
-from car_price_model import CarPriceModel  # Import your model class
+from car_price_model import CarPriceModel
 
 app = Flask(__name__)
 CORS(app)
 
-# Load the saved model and preprocessing objects
+
 try:
     checkpoint = torch.load('car_price_model.pth')
     model = CarPriceModel(input_dim=3)
@@ -35,13 +35,13 @@ def get_cars():
     if search_term:
         # Filter cars based on search term
         filtered_cars = [car for car in KNOWN_CARS if search_term in car.lower()]
-        # Limit to first 100 matches to prevent overwhelming the frontend
+       
         return jsonify({
             'cars': filtered_cars[:100],
             'total': len(filtered_cars)
         })
     else:
-        # Return first 100 cars if no search term
+       
         return jsonify({
             'cars': KNOWN_CARS[:100],
             'total': len(KNOWN_CARS)
@@ -52,10 +52,10 @@ def predict():
     try:
         data = request.json
         
-        # Extract features
+
         name = data['name']
         
-        # Check if car model is known
+
         if name not in KNOWN_CARS:
             return jsonify({
                 'error': f'Unknown car model. Please select from available models.',
@@ -66,7 +66,7 @@ def predict():
         miles = float(data['miles'])
         
         # Basic validation
-        current_year = 2025  # You might want to use current year from system
+        current_year = 2025  
         if year < 1900 or year > current_year:
             return jsonify({
                 'error': f'Year must be between 1900 and {current_year}',
@@ -118,16 +118,16 @@ def health_check():
 
 
 
-# Add these imports to your app.py
+
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from datetime import datetime
 
-# Add these new endpoints to your Flask app
+
 @app.route('/model-stats', methods=['GET'])
 def get_model_stats():
     try:
         # Load your training data
-        df = pd.read_csv('C:/Users/ankey/Downloads/archive/carvana.csv')
+        df = pd.read_csv('carvana.csv')
         
         # Prepare features and target
         X = df[['Name', 'Year', 'Miles']].copy()
@@ -217,7 +217,7 @@ def get_model_stats():
 def get_scatter_data():
     try:
         # Load your training data
-        df = pd.read_csv('C:/Users/ankey/Downloads/archive/carvana.csv')
+        df = pd.read_csv('carvana.csv')
         
         # Prepare features and target
         X = df[['Name', 'Year', 'Miles']].copy()
